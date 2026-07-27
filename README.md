@@ -36,21 +36,44 @@ which is exactly what you want between two sales meetings.
 
 ## Demoing it on a real phone
 
-`localhost` on a phone means *the phone itself*, so a QR code pointing there will not
-work. Put your laptop and your phone on the same wifi, then:
+A QR code is just a URL. If the app is running at `localhost`, the code contains
+`http://localhost:3000/...` — and on a phone `localhost` means *the phone itself*, so
+it scans fine and then fails to load. The code isn't broken; it's pointing somewhere
+the phone can't reach.
+
+### The way to demo (recommended)
 
 ```bash
-npm run dev
+npm run build     # once
+npm run demo
+```
+
+This opens a temporary public HTTPS address, prints it, and starts the app with that
+address baked into the QR codes. Then open the `/admin/qr` link it gives you.
+
+Because the address is public, **the phone does not need to be on any wifi** — it works
+over mobile data. That matters: plenty of restaurant wifi networks isolate devices from
+each other, which silently kills the local-network method below. It's also HTTPS, so
+phone cameras open it without a security warning.
+
+The address is temporary and changes every run. That's fine for a demo, and nothing stays
+exposed once you close the terminal.
+
+### Fallback: same wifi, no internet
+
+```bash
+npm start
 npm run where     # prints something like http://192.168.1.20:3000
 ```
 
-Open the dashboard at **that** address — `http://192.168.1.20:3000/admin/qr` — and the
-QR codes will encode it too. Scan one with the phone's camera and you're in the guest
-menu. Keep `/staff` open on the laptop while you do it; watching the ticket land is the
-whole pitch.
+Open the dashboard at **that** address and the QR codes encode it. The phone must be on
+the same wifi as the laptop. Use your phone's hotspot if the restaurant's network won't
+cooperate.
 
-Once you have a real domain, set `BASE_URL=https://yourdomain.com` and the QR codes
-follow it.
+### Permanent
+
+Once the app is deployed somewhere, set `BASE_URL=https://yourdomain.com` and the printed
+codes point there forever — no laptop involved.
 
 ## Configuration
 

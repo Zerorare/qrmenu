@@ -63,12 +63,21 @@ export default async function QrSheetPage() {
             lineHeight: 1.5,
           }}
         >
-          <strong>These codes point at {baseUrl}</strong>
+          <strong>Don&apos;t print these — a phone can&apos;t open them</strong>
           <div className="muted">
-            A phone can&apos;t open <code>localhost</code> — that address means the phone itself. For a
-            real test, run the server and open the dashboard from your computer&apos;s network address
-            (like <code>http://192.168.1.20:3000/admin/qr</code>), or set <code>BASE_URL</code> to your
-            deployed domain. The codes rebuild automatically from whatever address you use.
+            These codes point at <code>{baseUrl}</code>. A phone will scan the code fine and then
+            fail to load, because <code>localhost</code> means <em>the phone itself</em>. To get
+            codes that work on any phone:
+            <ol style={{ margin: '8px 0 0', paddingLeft: 20 }}>
+              <li>
+                Stop the server and run <code>npm run demo</code>. It opens a public address and
+                prints it — open <code>/admin/qr</code> there instead.
+              </li>
+              <li>
+                No internet? Run <code>npm run where</code>, open the dashboard at the
+                <code> 192.168.x.x</code> address it prints, and keep the phone on the same wifi.
+              </li>
+            </ol>
           </div>
         </div>
       )}

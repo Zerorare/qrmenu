@@ -49,13 +49,19 @@ likely to stop you. Realistic options, roughly in order:
 ## Before you leave the house
 
 - [ ] `npm run seed` — reset to clean demo data
-- [ ] `npm run dev`, then `npm run where` to get your laptop's wifi address
-- [ ] Open `/admin/qr` at that address and **print one QR card**
-- [ ] Scan it with your own phone and place a test order, to confirm the loop works
+- [ ] `npm run build`, then `npm run demo` — this prints a public HTTPS address
+- [ ] Open the `/admin/qr` link it printed and **print one QR card** from there
+- [ ] Scan that card with your own phone **over mobile data, wifi switched off**, and place
+      a test order. If it works with wifi off, it will work in any restaurant.
 - [ ] Charge your laptop and phone. Bring the charger.
-- [ ] **Set up your phone hotspot and connect the laptop to it as a rehearsal.** If their
-      wifi isolates devices from each other, your demo dies on the spot and this is the
-      only thing that saves it. Test it at home, not in front of an owner.
+
+Do not print QR codes from a `localhost` address. The phone scans them and then fails to
+load, because `localhost` on a phone means the phone itself. The app warns you on the QR
+page when this is about to happen — don't click past it.
+
+If the venue has no usable internet at all, fall back to `npm start` + `npm run where` and
+put the phone on your own hotspot. Rehearse that at home once so you're not learning it in
+front of an owner.
 
 ## The demo, in ninety seconds
 
