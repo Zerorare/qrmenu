@@ -1,0 +1,19 @@
+{
+  "name": "qrmenu",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "seed": "node scripts/seed.mjs",
+    "where": "node scripts/where.mjs"
+  },
+  "dependencies": {
+    "better-sqlite3": "12.4.1",
+    "next": "^15.5.22",
+    "qrcode": "1.5.4",
+    "react": "19.1.1",
+    "react-dom": "19.1.1"
+  }
+}
