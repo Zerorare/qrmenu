@@ -81,7 +81,7 @@ codes point there forever — no laptop involved.
 | --- | --- | --- |
 | `BASE_URL` | inferred from the request | Address encoded into the printed QR codes |
 | `DATABASE_PATH` | `./data/qrmenu.db` | Where the SQLite file lives |
-| `SESSION_SECRET` | a dev placeholder | **Set this to a random string in production** — it signs the staff cookie |
+| `SESSION_SECRET` | randomly generated on first boot, stored with the data | Signs the staff cookie. Setting it explicitly invalidates every existing staff session |
 | `PORT` | `3000` | Server port |
 
 ## How it works
@@ -115,7 +115,7 @@ disk — a small VPS, Railway, Fly.io, or Render all work. Vercel's serverless f
 
 ```bash
 npm run build
-SESSION_SECRET=<random-string> BASE_URL=https://yourdomain.com npm start
+BASE_URL=https://yourdomain.com npm start
 ```
 
 Put it behind a reverse proxy with HTTPS. Phone cameras will refuse to open a plain

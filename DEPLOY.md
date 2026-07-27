@@ -1,123 +1,109 @@
 # Putting it online (no Terminal needed)
 
 This gets you a permanent web address like `qrmenu-production.up.railway.app`. QR codes
-printed from it work forever, on any phone, without your laptop being involved at all.
+printed from it work forever, on any phone, without your laptop being involved.
 
 Everything below happens in a web browser.
 
----
-
-## Step 1 — Merge the code into your main branch
-
-The work is currently on a branch called `claude/qr-restaurant-menu-idea-29ttcc`.
-
-1. In the Claude app, click the **Create PR** button at the bottom of the chat
-2. That opens a pull request on GitHub — click **Merge pull request**, then **Confirm merge**
-
-Your `main` branch now has the app.
-
-*(You can skip this and deploy the branch directly instead — Railway lets you pick which
-branch to deploy in Settings. Merging is just tidier.)*
+> **There is no merge step.** `claude/qr-restaurant-menu-idea-29ttcc` is the only branch in
+> the repository and is already its default branch, so Railway will pick it up as-is. If you
+> later create a `main`, remember to point Railway at whichever branch you want deployed.
 
 ---
 
-## Step 2 — Create the project on Railway
+## Step 1 — Create the project
 
-1. Go to **railway.app** and click **Login** → **Login with GitHub**
-2. Click **New Project** → **Deploy from GitHub repo**
-3. If asked, give Railway permission to see your repositories
+1. Go to **railway.app** → **Login** → **Login with GitHub**
+2. **New Project** → **Deploy from GitHub repo**
+3. Grant Railway access to your repositories if it asks
 4. Choose **Zerorare/qrmenu**
 
-Railway starts building immediately. **It will fail or come up half-working until you finish
-step 3** — that's expected, don't panic and don't delete it.
+Railway starts building straight away. It will come up half-working until step 2 is done —
+that's expected. Don't delete it and start over.
 
 ---
 
-## Step 3 — Add a disk for the database
+## Step 2 — Add a disk, and point the database at it
 
-This app stores everything in a single SQLite file. Without a disk, that file is wiped on
-every redeploy and every restart — menus, tables, orders, all of it. **Do not skip this.**
+Everything lives in a single SQLite file. With no disk, that file is destroyed on every
+redeploy and every restart, taking the menu with it. **This is the one step you cannot skip.**
 
-1. In your project, click on the service (the box with your repo name)
-2. Go to the **Variables** tab and add these two:
-
-| Variable | Value |
-| --- | --- |
-| `DATABASE_PATH` | `/data/qrmenu.db` |
-| `SESSION_SECRET` | any long random string you make up — mash the keyboard, 30+ characters |
-
-`SESSION_SECRET` signs the staff login cookie. If you leave it unset the app falls back to a
-known placeholder value, which means anyone could forge a staff session.
-
-3. Now right-click the canvas (or use the service menu) → **Add Volume**
-4. Set the mount path to exactly:
+1. Click your service (the box named after the repo)
+2. Right-click the project canvas → **Add Volume** (or use the service's ⋮ menu)
+3. Set the mount path to exactly:
 
 ```
 /data
 ```
 
-Railway redeploys automatically after this.
+4. Go to the service's **Variables** tab and add one variable:
+
+| Variable | Value |
+| --- | --- |
+| `DATABASE_PATH` | `/data/qrmenu.db` |
+
+Railway redeploys itself after this.
+
+*You don't need to set a session secret. If `SESSION_SECRET` is unset the app generates a
+random one on first boot and keeps it on the volume, so logins survive redeploys. Set it
+yourself only if you want to invalidate every staff session at once.*
 
 ---
 
-## Step 4 — Get your web address
+## Step 3 — Get your web address
 
-1. Click the service → **Settings** tab → scroll to **Networking**
-2. Click **Generate Domain**
+Service → **Settings** → **Networking** → **Generate Domain**.
 
 You'll get something like `qrmenu-production-a1b2.up.railway.app`. Open it.
 
-**You should see the demo restaurant, already working.** The app notices the database is
-empty on first boot and loads the demo menu itself, so there's nothing to run by hand.
+**You should see the demo restaurant, already working.** The app notices an empty database on
+first boot and loads the demo menu itself — there's nothing to run by hand.
 
 ---
 
-## Step 5 — Check it, then make it yours
-
-Open these, in this order:
+## Step 4 — Check it, then make it yours
 
 | Address | What to do |
 | --- | --- |
-| `https://your-address/` | Should show the landing page with table buttons |
-| `https://your-address/admin` | Sign in with PIN **1234** |
-| `https://your-address/admin/settings` | **Change the PIN immediately** — 1234 is public knowledge, it's written in this repo |
+| `https://your-address/` | Landing page with table buttons |
+| `https://your-address/admin` | Sign in, PIN **1234** |
+| `https://your-address/admin/settings` | **Change the PIN now** — 1234 is written in this repo, so it's public |
 | `https://your-address/admin/qr` | Your QR codes. **There should be no orange warning box.** |
 | `https://your-address/staff` | The order screen |
 
-Then the real test: **turn your phone's wifi off**, scan a QR code from `/admin/qr` with your
-phone camera on mobile data, and place an order. Watch it land on `/staff` on your laptop.
+Then the real test: **turn your phone's wifi off**, scan a code from `/admin/qr` on mobile
+data, and order. Watch it appear on `/staff`.
 
 If that works, you're ready to walk into a restaurant.
 
 ---
 
-## Turning it into a real client's restaurant
+## Making it a real client's restaurant
 
 All in `/admin`, no code:
 
 - **Settings** — name, tagline, accent colour, currency, staff PIN
-- **Menu** — add categories and dishes, edit prices, hide sold-out items
-- **Tables** — add or rename their actual tables
+- **Menu** — categories, dishes, prices, and the sold-out switch
+- **Tables** — their actual tables
 - **QR codes** — print the sheet, cut out the cards
 
 ---
 
 ## Things that will bite you
 
-**Cost.** Railway bills by usage. Something this small is cheap, but it is not free forever —
-check their current pricing before you rely on it. A free tier that sleeps or has no
-persistent disk will lose your client's menu, which is much worse than paying a few dollars.
+**Cost.** Railway bills by usage. Something this small is cheap but not free forever — check
+their current pricing. Avoid any free tier that sleeps or has no persistent disk; it will
+lose a client's menu, which costs you far more than a few dollars.
 
-**One restaurant per deployment.** The app currently supports a single venue. For a second
-client, create a second Railway project from the same repo. That's fine for the first few;
-if this becomes a real business you'll want proper multi-restaurant support instead.
+**One restaurant per deployment.** The app serves a single venue. For a second client, create
+a second Railway project from the same repo. Fine for the first few; if this becomes a real
+business, proper multi-restaurant support is the thing to build.
 
-**Backups.** There aren't any. The database is one file on the volume. Before you make big
-changes to a paying client's menu, be aware there is no undo.
+**No backups.** The database is one file on the volume. There is no undo before you make big
+changes to a paying client's menu.
 
-**Redeploys keep your data**, because the database lives on the volume, not in the code. This
-was tested: editing the restaurant name and a price, then restarting, leaves both intact and
-does not re-add the demo data.
+**Redeploys keep your data.** Verified: renaming the restaurant and changing a price, then
+restarting, leaves both intact, adds no duplicate demo data, and keeps staff logged in.
 
-**`AUTO_SEED=false`** turns off the first-boot demo data, if you ever want a deployment that
-starts genuinely empty.
+**`AUTO_SEED=false`** starts a deployment with a genuinely empty database, if you ever want
+that instead of the demo menu.
