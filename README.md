@@ -27,6 +27,10 @@ npm run dev
 
 Then open <http://localhost:3000>. The default PIN is **1234**.
 
+The demo restaurant is a Korean grill house with an English menu and prices in won.
+Everything about it — name, colour, currency, dishes, tables — is editable in `/admin`,
+so you can rebuild it as any real restaurant in a few minutes.
+
 `npm run seed` is safe to re-run — it resets the demo restaurant to a clean state,
 which is exactly what you want between two sales meetings.
 
@@ -76,8 +80,8 @@ follow it.
 ### Money
 
 Amounts are stored as integers in the currency's smallest unit, so there is no floating
-point drift. `currency_decimals = 0` suits so'm (`45000` → `45 000 so'm`); set it to `2`
-for currencies with cents.
+point drift. `currency_decimals = 0` suits won (`17000` → `₩17,000`); set it to `2` for
+currencies with sub-units, like dollars or euros.
 
 ## Deploying
 
@@ -106,8 +110,10 @@ Things a restaurant will ask for that are deliberately not built yet:
   paper eventually.
 - **One PIN for all staff**, so there is no record of *who* marked an order served. Fine for
   one venue, not enough for a chain.
-- **No multi-language switch.** The seed data is in Uzbek and the interface chrome is in
-  English. Adding a language toggle is straightforward and worth doing before a real install.
+- **No language toggle.** Everything is English. For a Korean venue this is only half the
+  job: foreign guests are served, but Korean guests and the kitchen staff reading tickets
+  would rather see Korean. Adding a second name per dish and a toggle in the header is the
+  single highest-value next feature — see PITCH.md.
 - **No photos on the seeded items.** The menu supports an image URL per dish; the demo data
   just doesn't fill it in. Real photos noticeably lift order values, so collect them on day one.
 

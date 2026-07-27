@@ -1,20 +1,61 @@
-# Notes for the restaurant visits
+# Notes for the restaurant visits — Korea
 
-Working notes for walking into a restaurant with this. The software is the easy part —
-the hard part is the ten minutes you get with a busy owner.
+Working notes for walking into a restaurant with this. The software is the easy part.
+
+## Read this before you go
+
+**Korea is one of the hardest markets on earth for this product, and you should know that
+before you spend a day walking into restaurants.**
+
+Table-side ordering is already normal here. A large share of Korean restaurants have a
+tablet bolted to every table, from established vendors, and almost every table has a call
+bell. So the pitch that works in a country with no table ordering — *"your guests can order
+without waiting for a waiter"* — lands on an owner who already solved that two years ago.
+If you lead with it you will get polite nods and no sale.
+
+That does **not** mean there is no business here. It means the generic version of this
+product is not the business. Two openings are real:
+
+**1. Foreign customers.** Korean ordering tablets range from mediocre to useless in English,
+and a printed Korean menu leaves a foreign table pointing at pictures while a staff member
+translates. In Hongdae, Itaewon, Myeongdong, Gangnam, Jongno, or around Haeundae in Busan,
+that happens at half the tables on a Friday night. An English menu that a guest reads on
+their own phone, with an order the kitchen receives correctly, solves a problem the
+incumbent tablets genuinely do not.
+
+This is also *your* edge specifically. You are pitching in English, to owners who want
+English-speaking customers. That is a much better fit than competing on features.
+
+**2. Cost, for small places.** Tablet systems mean hardware plus a monthly fee per table.
+A QR code costs nothing per table and needs no hardware. For a small owner-run place with
+six or eight tables who looked at tablets and decided they were too expensive, this is a
+different conversation. Find out what tablet vendors actually quote locally before you set
+your own price — ask the first three owners you meet, they will tell you.
+
+**The honest test:** if the restaurant already has tablets and gets no foreign customers,
+walk away. You will not win that one and chasing it will burn your week.
+
+## The language problem — yours
+
+If your Korean is limited, cold-walking into restaurants is hard, and this is the thing most
+likely to stop you. Realistic options, roughly in order:
+
+- Target places whose owner or staff already work in English — which is exactly the
+  foreigner-facing restaurants you want anyway. The targeting and the constraint agree.
+- Bring a Korean-speaking friend for the first few visits. Offer them a cut if this works.
+- Go mid-afternoon, roughly 3–5pm, between lunch and dinner service. Walking in at 7pm on a
+  Friday will get you thrown out, and you will deserve it.
 
 ## Before you leave the house
 
 - [ ] `npm run seed` — reset to clean demo data
 - [ ] `npm run dev`, then `npm run where` to get your laptop's wifi address
-- [ ] Open `/admin/qr` at that address and **print one QR card**, or just have it on screen
-- [ ] Scan it with your own phone once, and place a test order, to confirm the whole loop works
+- [ ] Open `/admin/qr` at that address and **print one QR card**
+- [ ] Scan it with your own phone and place a test order, to confirm the loop works
 - [ ] Charge your laptop and phone. Bring the charger.
-- [ ] Know your own wifi fallback: if their wifi is locked down, use your phone's hotspot
-      and connect the laptop to it
-
-If their wifi blocks device-to-device traffic, your demo dies on the spot. The hotspot
-fallback is the single most important thing on this list.
+- [ ] **Set up your phone hotspot and connect the laptop to it as a rehearsal.** If their
+      wifi isolates devices from each other, your demo dies on the spot and this is the
+      only thing that saves it. Test it at home, not in front of an owner.
 
 ## The demo, in ninety seconds
 
@@ -22,9 +63,9 @@ Do not open a slide deck. Do this:
 
 1. Put your phone in the owner's hand and your laptop on the counter showing `/staff`.
 2. Ask them to scan the QR card and order something.
-3. Say nothing. Let them watch the ticket land on the laptop with the chime.
-4. Then say: *"That's it. That's the whole product. Your guests never wait to catch a
-   waiter's eye, and nothing gets written down wrong."*
+3. Say nothing. Let them watch the ticket land with the chime.
+4. Then: *"Your foreign customers order in English, by themselves, and what reaches your
+   kitchen is exactly what they picked."*
 
 The silence in step 3 does the selling. Resist filling it.
 
@@ -34,77 +75,89 @@ Lead with their problems, not your features.
 
 | Their problem | What to say |
 | --- | --- |
-| Reprinting menus when prices change | "You change the price here, and every table sees it instantly. No printing." |
-| Running out of a dish mid-service | "One switch and it disappears from every menu in the room. No more disappointing people." |
-| Waiters mishearing orders | "The guest types it. What the kitchen sees is exactly what they chose." |
-| Not enough staff on a busy night | "Your waiters stop taking orders and start carrying food." |
-| Slow tables at peak time | "Guests order the moment they've decided, not the moment someone's free." |
+| Foreign guests can't read the menu | "They read it in English on their own phone. Nobody has to translate." |
+| Staff time lost explaining dishes | "The description is on the screen. Your staff carry food instead of interpreting." |
+| Wrong orders from a language gap | "The guest picks it themselves. What the kitchen sees is what they chose." |
+| Reprinting menus when prices change | "Change the price here and every table sees it instantly." |
+| Running out of a dish mid-service | "One switch and it disappears from every menu in the room." |
+| Tablets quoted too expensive | "No hardware. No tablet per table. It's a paper QR code." |
 
 ## Objections you will actually hear
 
+**"We already have tablets."**
+Ask one question: *"How do your foreign customers use them?"* If the answer is a shrug,
+you have an opening — this sits alongside the tablets for exactly those tables. If the
+tablets handle English well and they get no foreign guests, thank them and leave.
+
 **"My customers are older, they won't use it."**
-True for some, and you should agree rather than argue. This replaces nothing — keep the
-paper menus. It's for the table that's ready to order while the waiter is across the room.
-Offer to look at the numbers together after two weeks.
+Agree, don't argue. This replaces nothing — keep the paper menus and the call bell. It's for
+the table that can't read the Korean menu.
 
 **"How much?"**
 Don't answer with a number on the first visit if you can avoid it. Say the first month is
 free while you set it up together, and you'll agree a price once they've seen it work.
-That gets you an install, and an install gets you a reference.
+An install gets you a reference; a reference gets you the next five.
 
 **"What if the internet goes down?"**
-Honest answer: the QR menu stops working and they take orders the way they do today.
-Nothing breaks, nothing is lost, no one is stuck. That answer builds more trust than
-pretending it can't happen.
+Honest answer: the QR menu stops and they take orders the way they do today. Nothing breaks
+and nothing is lost. That answer builds more trust than pretending it can't happen.
 
-**"Does it connect to my cash register?"**
-Not yet — be straight about this. Right now the staff screen *is* the order list, and
-guests pay at the table exactly as they do now. Ask which POS they use and write it down.
-After three or four restaurants you'll know which integration is worth building first,
-and that becomes the thing competitors can't easily copy.
+**"Does it connect to my POS / 포스?"**
+Not yet, and say so plainly. The staff screen *is* the order list, and guests pay at the
+counter exactly as they do now. Ask which POS they use and write it down. After four or five
+restaurants you'll know which integration is worth building, and that's the thing a
+competitor can't copy in a weekend.
 
 **"Someone will spam fake orders."**
-Each table is capped at six orders a minute, and staff can cancel any ticket with one tap.
+Each table is capped at six orders a minute and staff can cancel any ticket with one tap.
 Worth mentioning — it shows you've thought past the happy path.
 
 ## Pricing
 
 Charge monthly, not once. A one-time build is a job; a subscription is a business.
 
-Rough shape:
+- **Setup**: menu entry, translation, printed QR cards, an hour training staff. Charge for
+  this or give it away deliberately — never do it accidentally for free. Translating a
+  200-item menu into good English is real work and is worth money on its own.
+- **Monthly**: a flat fee per venue. Simple beats clever. Per-order pricing makes owners do
+  arithmetic and feel punished for being busy.
 
-- **Setup**: menu entry, printed QR cards, and an hour training the staff. Charge for this
-  or give it away deliberately — but never do it accidentally for free.
-- **Monthly**: a flat fee per venue. Simple beats clever; per-order pricing makes owners
-  do arithmetic and feel punished for succeeding.
+Anchor against what they'd otherwise pay for tablets, and price clearly below it — that
+comparison is your strongest argument, so find out the real local number before quoting.
+The margin is that restaurant #2 costs you almost nothing to serve.
 
-Set the number against what *they* already pay for: one month should cost less than
-reprinting their menus once, and obviously less than an extra shift. Ask a couple of owners
-what they'd expect to pay before you fix a price — you'll learn more from that question
-than from any calculation.
-
-The margin is in the fact that restaurant #2 costs you almost nothing to serve. Ten venues
-on a modest monthly fee is a real income; the work is finding them, not running them.
+One practical note: once you charge money, you need a business registration (사업자등록) to
+invoice properly, and your visa status determines whether you can run a business at all.
+Check that before you take anyone's money — this is the kind of thing that is boring right
+up until it is a serious problem.
 
 ## What to actually aim for tomorrow
 
 Not a sale. **One restaurant that says yes to a free two-week trial.**
 
-Pick the smallest, busiest place with the youngest owner. Avoid chains — they have head
-offices and procurement, and you'll wait three months for a meeting. A single owner who
-works in their own restaurant can decide while you're standing there.
+Pick a small, busy, owner-run place in a foreigner-heavy area that does *not* have tablets.
+Avoid chains and franchises — they have head offices and you'll wait months.
 
-When one says yes, sit down with their paper menu and enter it into `/admin/menu` on the
-spot. Do not leave saying "I'll set it up and come back". Set it up in front of them, print
-their QR codes, and put one on a table before you go.
+When one says yes, sit down with their menu and enter it into `/admin/menu` on the spot.
+Don't leave saying "I'll set it up and come back." Set it up in front of them, print their
+QR codes, and put one on a table before you go.
+
+## Build this next, not something else
+
+**A Korean/English toggle.** Right now the app is English only. The moment you install in a
+real Korean restaurant you'll want a second name per dish and a language switch in the
+header — Korean guests and the kitchen staff reading tickets both want Korean, foreign
+guests want English. It's a small change to the data model and it makes the product sellable
+to the other 90% of restaurants rather than only foreigner-facing ones.
+
+After that, whatever an owner asks for twice.
 
 ## After the first install
 
-Go back on day two and day seven. Watch a real service. You will learn more in one hour
+Go back on day two and day seven and watch a real service. You'll learn more in one hour
 behind that counter than in a month of writing code:
 
-- Do staff actually look at the screen, or does it get buried?
-- Is the chime loud enough over a busy room?
-- What do they ask for that isn't there?
-
-Whatever they ask for twice — build that next.
+- Do staff actually look at the screen, or does it get buried behind the POS?
+- Is the chime audible over a room full of grills and extractor fans? (In a Korean BBQ
+  place, genuinely test this — it is loud.)
+- Which dishes do foreign guests hesitate over? Those descriptions need work.

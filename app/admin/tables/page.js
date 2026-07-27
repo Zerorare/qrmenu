@@ -71,7 +71,7 @@ export default async function AdminTablesPage() {
       <div className="card" style={{ padding: 18 }}>
         <h2 style={{ fontSize: 16, marginTop: 0 }}>Add a table</h2>
         <form action={addTable} className="row" style={{ flexWrap: 'wrap' }}>
-          <input className="field" name="label" placeholder="Name — e.g. Stol 7" required style={{ flex: '2 1 200px' }} />
+          <input className="field" name="label" placeholder="Name — e.g. Table 7" required style={{ flex: '2 1 200px' }} />
           <input className="field" name="code" placeholder="Code (optional)" style={{ flex: '1 1 140px' }} />
           <input className="field" name="seats" type="number" min="1" max="40" defaultValue="4" style={{ flex: '0 0 90px' }} />
           <button className="btn" type="submit">
