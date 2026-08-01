@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-export default function PinLogin({ title, subtitle, dark = false }) {
+export default function PinLogin({ title, subtitle, dark = false, strings }) {
+  const L = strings ?? {};
   const router = useRouter();
   const [pin, setPin] = useState('');
   const [error, setError] = useState('');
@@ -40,7 +41,7 @@ export default function PinLogin({ title, subtitle, dark = false }) {
         </p>
 
         <label className="lbl" htmlFor="pin">
-          Staff PIN
+          {L.staffPin ?? 'Staff PIN'}
         </label>
         <input
           id="pin"
@@ -57,7 +58,7 @@ export default function PinLogin({ title, subtitle, dark = false }) {
         {error && <p className="err">{error}</p>}
 
         <button className="btn block" style={{ marginTop: 18 }} disabled={busy || pin.length < 4}>
-          {busy ? 'Checking…' : 'Sign in'}
+          {busy ? (L.checking ?? 'Checking…') : (L.signIn ?? 'Sign in')}
         </button>
       </form>
     </div>

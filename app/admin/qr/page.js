@@ -2,6 +2,7 @@ import { headers } from 'next/headers';
 import QRCode from 'qrcode';
 import { currentStaffRestaurant } from '@/lib/auth';
 import { listTables } from '@/lib/db';
+import { t } from '@/lib/i18n.mjs';
 import PrintButton from './PrintButton';
 
 export const dynamic = 'force-dynamic';
@@ -24,6 +25,7 @@ export default async function QrSheetPage() {
   const restaurant = await currentStaffRestaurant();
   const tables = listTables(restaurant.id);
   const baseUrl = await resolveBaseUrl();
+  const L = t(restaurant.language);
 
   const cards = await Promise.all(
     tables.map(async (table) => {
@@ -92,9 +94,9 @@ export default async function QrSheetPage() {
             <img src={dataUri} alt={`QR code for ${table.label}`} />
             <div className="t-label">{table.label}</div>
             <div className="t-hint">
-              Scan to see the menu
+              {L.qrScan}
               <br />
-              and order from your phone
+              {L.qrOrder}
             </div>
             <div className="t-hint no-print" style={{ marginTop: 8, wordBreak: 'break-all', opacity: 0.6 }}>
               {url}

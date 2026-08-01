@@ -1,5 +1,6 @@
 import { currentStaffRestaurant } from '@/lib/auth';
 import { updateSettings } from '../actions';
+import { LANGUAGES } from '@/lib/i18n.mjs';
 
 export const dynamic = 'force-dynamic';
 
@@ -32,6 +33,29 @@ export default async function AdminSettingsPage() {
             defaultValue={restaurant.tagline}
             placeholder="Shown under the name on the guest menu"
           />
+        </div>
+
+        <div style={{ marginBottom: 16 }}>
+          <label className="lbl" htmlFor="language">
+            Interface language
+          </label>
+          <select
+            id="language"
+            className="field"
+            name="language"
+            defaultValue={restaurant.language}
+            style={{ maxWidth: 240 }}
+          >
+            {LANGUAGES.map((l) => (
+              <option key={l.code} value={l.code}>
+                {l.label}
+              </option>
+            ))}
+          </select>
+          <p className="tiny muted" style={{ marginBottom: 0 }}>
+            Changes the buttons guests and staff see, and the text printed on the QR cards.
+            Dish names stay exactly as you typed them.
+          </p>
         </div>
 
         <div className="row" style={{ marginBottom: 16, alignItems: 'flex-end', flexWrap: 'wrap' }}>

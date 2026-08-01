@@ -3,11 +3,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { formatMoney } from '@/lib/money';
+import { t } from '@/lib/i18n.mjs';
 
-const COLUMNS = [
-  { status: 'new', label: 'New', next: 'preparing', action: 'Start preparing' },
-  { status: 'preparing', label: 'Preparing', next: 'ready', action: 'Mark ready' },
-  { status: 'ready', label: 'Ready', next: 'served', action: 'Served' },
+const columnsFor = (L) => [
+  { status: 'new', label: L.colNew, next: 'preparing', action: L.actStart },
+  { status: 'preparing', label: L.colPreparing, next: 'ready', action: L.actReady },
+  { status: 'ready', label: L.colReady, next: 'served', action: L.actServed },
 ];
 
 const POLL_MS = 3000;
@@ -17,15 +18,17 @@ function toDate(sqlTimestamp) {
   return new Date(`${sqlTimestamp.replace(' ', 'T')}Z`);
 }
 
-function elapsed(sqlTimestamp, now) {
+function elapsed(sqlTimestamp, now, L) {
   const minutes = Math.max(0, Math.floor((now - toDate(sqlTimestamp)) / 60000));
-  if (minutes < 1) return 'just now';
-  if (minutes < 60) return `${minutes} min ago`;
-  return `${Math.floor(minutes / 60)} h ${minutes % 60} min ago`;
+  if (minutes < 1) return L.justNow;
+  if (minutes < 60) return L.minsAgo(minutes);
+  return L.hoursAgo(Math.floor(minutes / 60), minutes % 60);
 }
 
 export default function StaffBoard({ restaurant, initialActive, initialRecent }) {
   const router = useRouter();
+  const L = t(restaurant.language);
+  const COLUMNS = columnsFor(L);
   const [active, setActive] = useState(initialActive);
   const [recent, setRecent] = useState(initialRecent);
   const [now, setNow] = useState(() => Date.now());
@@ -170,21 +173,21 @@ export default function StaffBoard({ restaurant, initialActive, initialRecent })
             <strong style={{ fontSize: 17 }}>{restaurant.name}</strong>
             <span className="pill">
               <span className="live-dot" />
-              {connected ? 'Live' : 'Reconnecting…'}
+              {connected ? L.live : L.reconnecting}
             </span>
           </div>
 
           <div className="row">
             {!soundOn && (
               <button type="button" className="btn sm" onClick={enableSound}>
-                🔔 Turn on sound
+                {L.turnOnSound}
               </button>
             )}
             <button type="button" className="btn ghost sm" onClick={() => setShowHistory((v) => !v)}>
-              {showHistory ? 'Hide served' : 'Served today'}
+              {showHistory ? L.hideServed : L.showServed}
             </button>
             <button type="button" className="btn ghost sm" onClick={signOut}>
-              Sign out
+              {L.signOut}
             </button>
           </div>
         </div>
@@ -193,7 +196,7 @@ export default function StaffBoard({ restaurant, initialActive, initialRecent })
       <div className="wrap">
         {!soundOn && (
           <p className="tiny muted" style={{ marginTop: 14, marginBottom: 0 }}>
-            Tap “Turn on sound” once and this screen will chime whenever a table orders.
+            {L.soundHint}
           </p>
         )}
 
@@ -207,7 +210,7 @@ export default function StaffBoard({ restaurant, initialActive, initialRecent })
                   <span className="col-count">{tickets.length}</span>
                 </div>
 
-                {tickets.length === 0 && <div className="empty">Nothing here right now</div>}
+                {tickets.length === 0 && <div className="empty">{L.emptyColumn}</div>}
 
                 {tickets.map((order) => (
                   <article key={order.id} className={`card ticket is-${order.status}`}>
@@ -215,7 +218,7 @@ export default function StaffBoard({ restaurant, initialActive, initialRecent })
                       <span className="ticket-table">{order.table_label}</span>
                       <span className="tiny muted">#{order.id}</span>
                     </div>
-                    <div className="tiny muted">{elapsed(order.created_at, now)}</div>
+                    <div className="tiny muted">{elapsed(order.created_at, now, L)}</div>
 
                     <div className="ticket-lines">
                       {order.items.map((line, index) => (
@@ -234,7 +237,7 @@ export default function StaffBoard({ restaurant, initialActive, initialRecent })
                         type="button"
                         className="btn ghost sm"
                         onClick={() => move(order.id, 'cancelled')}
-                        aria-label={`Cancel order ${order.id}`}
+                        aria-label={L.cancelOrder(order.id)}
                       >
                         ✕
                       </button>
@@ -251,23 +254,23 @@ export default function StaffBoard({ restaurant, initialActive, initialRecent })
 
         {showHistory && (
           <section style={{ paddingBottom: 60 }}>
-            <div className="col-head">Served &amp; cancelled today</div>
+            <div className="col-head">{L.servedToday}</div>
             <div className="card" style={{ overflowX: 'auto' }}>
               <table className="tbl">
                 <thead>
                   <tr>
                     <th>#</th>
-                    <th>Table</th>
-                    <th>Items</th>
-                    <th>Total</th>
-                    <th>Status</th>
+                    <th>{L.thTable}</th>
+                    <th>{L.thItems}</th>
+                    <th>{L.thTotal}</th>
+                    <th>{L.thStatus}</th>
                   </tr>
                 </thead>
                 <tbody>
                   {recent.length === 0 && (
                     <tr>
                       <td colSpan={5} className="muted">
-                        No completed orders yet.
+                        {L.noCompleted}
                       </td>
                     </tr>
                   )}
@@ -279,7 +282,7 @@ export default function StaffBoard({ restaurant, initialActive, initialRecent })
                         {order.items.map((line) => `${line.qty}× ${line.name}`).join(', ')}
                       </td>
                       <td>{money(order.total)}</td>
-                      <td>{order.status === 'cancelled' ? 'Cancelled' : 'Served'}</td>
+                      <td>{order.status === 'cancelled' ? L.stCancelled : L.stServed}</td>
                     </tr>
                   ))}
                 </tbody>

@@ -1,5 +1,6 @@
 import { currentStaffRestaurant } from '@/lib/auth';
-import { listActiveOrders, listRecentOrders } from '@/lib/db';
+import { listActiveOrders, listRecentOrders, getDefaultRestaurant } from '@/lib/db';
+import { t } from '@/lib/i18n.mjs';
 import PinLogin from '@/app/components/PinLogin';
 import StaffBoard from './StaffBoard';
 
@@ -11,11 +12,16 @@ export default async function StaffPage() {
   const restaurant = await currentStaffRestaurant();
 
   if (!restaurant) {
+    // Nobody is signed in yet, so fall back to the venue's own language.
+    // Only plain strings cross into the client component — the string table
+    // also holds formatter functions, which React cannot serialize.
+    const L = t(getDefaultRestaurant()?.language);
     return (
       <PinLogin
         dark
-        title="Staff order screen"
-        subtitle="Enter the PIN your manager gave you to see incoming table orders."
+        title={L.staffTitle}
+        subtitle={L.staffSubtitle}
+        strings={{ staffPin: L.staffPin, signIn: L.signIn, checking: L.checking }}
       />
     );
   }

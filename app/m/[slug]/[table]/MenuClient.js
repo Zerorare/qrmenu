@@ -2,16 +2,10 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { formatMoney } from '@/lib/money';
-
-const STATUS_COPY = {
-  new: { label: 'Sent to the kitchen', hint: 'The staff have your order.' },
-  preparing: { label: 'Being prepared', hint: 'Your food is on the stove.' },
-  ready: { label: 'Ready', hint: 'Coming to your table now.' },
-  served: { label: 'Served', hint: 'Enjoy your meal!' },
-  cancelled: { label: 'Cancelled', hint: 'Please speak to a staff member.' },
-};
+import { t } from '@/lib/i18n.mjs';
 
 export default function MenuClient({ restaurant, table, menu }) {
+  const L = t(restaurant.language);
   const storageKey = `qrmenu:cart:${restaurant.slug}:${table.code}`;
 
   const [cart, setCart] = useState({});
@@ -149,7 +143,7 @@ export default function MenuClient({ restaurant, table, menu }) {
         </div>
       </header>
 
-      <nav className="cat-nav" aria-label="Menu categories">
+      <nav className="cat-nav" aria-label={L.menuCategories}>
         <div className="cat-nav-inner">
           {menu.map((category) => (
             <button
@@ -196,11 +190,11 @@ export default function MenuClient({ restaurant, table, menu }) {
                   <div style={{ flex: 'none' }}>
                     {qty > 0 ? (
                       <div className="qty">
-                        <button type="button" onClick={() => setQty(item.id, qty - 1)} aria-label={`Remove one ${item.name}`}>
+                        <button type="button" onClick={() => setQty(item.id, qty - 1)} aria-label={L.removeOne(item.name)}>
                           −
                         </button>
                         <span>{qty}</span>
-                        <button type="button" onClick={() => setQty(item.id, qty + 1)} aria-label={`Add one ${item.name}`}>
+                        <button type="button" onClick={() => setQty(item.id, qty + 1)} aria-label={L.addOne(item.name)}>
                           +
                         </button>
                       </div>
@@ -209,7 +203,7 @@ export default function MenuClient({ restaurant, table, menu }) {
                         type="button"
                         className="add-btn"
                         onClick={() => setQty(item.id, 1)}
-                        aria-label={`Add ${item.name}`}
+                        aria-label={L.addItem(item.name)}
                       >
                         +
                       </button>
@@ -232,12 +226,12 @@ export default function MenuClient({ restaurant, table, menu }) {
             <div className="grow">
               <div style={{ fontWeight: 700 }}>{money(total)}</div>
               <div className="tiny muted">
-                {count} {count === 1 ? 'item' : 'items'}
-                {serviceFee > 0 && ` · incl. ${restaurant.service_charge_pct}% service`}
+                {L.itemCount(count)}
+                {serviceFee > 0 && ` · ${L.inclService(restaurant.service_charge_pct)}`}
               </div>
             </div>
             <button type="button" className="btn" onClick={() => setSheet('review')}>
-              Review order
+              {L.reviewOrder}
             </button>
           </div>
         </div>
@@ -248,14 +242,14 @@ export default function MenuClient({ restaurant, table, menu }) {
           className="sheet-backdrop"
           role="dialog"
           aria-modal="true"
-          aria-label="Review order"
+          aria-label={L.reviewOrder}
           onClick={(event) => event.target === event.currentTarget && setSheet(null)}
         >
           <div className="sheet">
             <div className="spread" style={{ marginBottom: 8 }}>
-              <h2 style={{ margin: 0 }}>Your order</h2>
+              <h2 style={{ margin: 0 }}>{L.yourOrder}</h2>
               <button type="button" className="btn ghost sm" onClick={() => setSheet(null)}>
-                Close
+                {L.close}
               </button>
             </div>
 
@@ -263,11 +257,11 @@ export default function MenuClient({ restaurant, table, menu }) {
               <div className="sheet-line" key={line.item.id}>
                 <div className="row">
                   <div className="qty">
-                    <button type="button" onClick={() => setQty(line.item.id, line.qty - 1)} aria-label={`Remove one ${line.item.name}`}>
+                    <button type="button" onClick={() => setQty(line.item.id, line.qty - 1)} aria-label={L.removeOne(line.item.name)}>
                       −
                     </button>
                     <span>{line.qty}</span>
-                    <button type="button" onClick={() => setQty(line.item.id, line.qty + 1)} aria-label={`Add one ${line.item.name}`}>
+                    <button type="button" onClick={() => setQty(line.item.id, line.qty + 1)} aria-label={L.addOne(line.item.name)}>
                       +
                     </button>
                   </div>
@@ -280,31 +274,31 @@ export default function MenuClient({ restaurant, table, menu }) {
             {serviceFee > 0 && (
               <>
                 <div className="sheet-line muted">
-                  <span>Subtotal</span>
+                  <span>{L.subtotal}</span>
                   <span>{money(subtotal)}</span>
                 </div>
                 <div className="sheet-line muted">
-                  <span>Service ({restaurant.service_charge_pct}%)</span>
+                  <span>{L.service} ({restaurant.service_charge_pct}%)</span>
                   <span>{money(serviceFee)}</span>
                 </div>
               </>
             )}
 
             <div className="sheet-line sheet-total">
-              <span>Total</span>
+              <span>{L.total}</span>
               <span>{money(total)}</span>
             </div>
 
             <div style={{ margin: '16px 0' }}>
               <label className="lbl" htmlFor="order-note">
-                Anything the kitchen should know?
+                {L.noteLabel}
               </label>
               <textarea
                 id="order-note"
                 className="field"
                 rows={2}
                 maxLength={400}
-                placeholder="No onions, extra bread…"
+                placeholder={L.notePlaceholder}
                 value={note}
                 onChange={(event) => setNote(event.target.value)}
               />
@@ -318,33 +312,33 @@ export default function MenuClient({ restaurant, table, menu }) {
               disabled={placing || lines.length === 0}
               onClick={placeOrder}
             >
-              {placing ? 'Sending…' : `Send order · ${money(total)}`}
+              {placing ? L.sending : `${L.sendOrder} · ${money(total)}`}
             </button>
             <p className="tiny muted center" style={{ marginBottom: 0 }}>
-              You pay at the table as usual — this only sends the order to the staff.
+              {L.payNote}
             </p>
           </div>
         </div>
       )}
 
       {sheet === 'placed' && placedOrder && (
-        <div className="sheet-backdrop" role="dialog" aria-modal="true" aria-label="Order sent">
+        <div className="sheet-backdrop" role="dialog" aria-modal="true" aria-label={L.yourOrder}>
           <div className="sheet center">
             <div className="success-mark">✓</div>
-            <h2 style={{ marginBottom: 4 }}>Order #{placedOrder.id} sent</h2>
+            <h2 style={{ marginBottom: 4 }}>{L.orderSent(placedOrder.id)}</h2>
             <p className="muted" style={{ marginTop: 0 }}>
               {table.label} · {money(placedOrder.total)}
             </p>
 
             <div className="card" style={{ padding: 16, margin: '18px 0', textAlign: 'left' }}>
               <div style={{ fontWeight: 700, marginBottom: 2 }}>
-                {STATUS_COPY[placedOrder.status]?.label ?? 'Sent'}
+                {L.status[placedOrder.status]?.[0] ?? L.status.new[0]}
               </div>
-              <div className="tiny muted">{STATUS_COPY[placedOrder.status]?.hint}</div>
+              <div className="tiny muted">{L.status[placedOrder.status]?.[1]}</div>
             </div>
 
             <button type="button" className="btn block ghost" onClick={() => setSheet(null)}>
-              Order something else
+              {L.orderAgain}
             </button>
           </div>
         </div>

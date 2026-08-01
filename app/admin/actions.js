@@ -5,6 +5,7 @@ import { cookies } from 'next/headers';
 import { db, getRestaurantById } from '@/lib/db';
 import { parseMoney } from '@/lib/money';
 import { currentStaffRestaurant, buildToken, COOKIE_NAME } from '@/lib/auth';
+import { LANGUAGES } from '@/lib/i18n.mjs';
 
 async function requireRestaurant() {
   const restaurant = await currentStaffRestaurant();
@@ -153,7 +154,7 @@ export async function updateSettings(formData) {
   db.prepare(
     `UPDATE restaurants
         SET name = ?, tagline = ?, accent = ?, currency_symbol = ?,
-            service_charge_pct = ?, staff_pin = ?
+            service_charge_pct = ?, staff_pin = ?, language = ?
       WHERE id = ?`
   ).run(
     String(formData.get('name') ?? '').trim().slice(0, 80) || restaurant.name,
@@ -162,6 +163,9 @@ export async function updateSettings(formData) {
     String(formData.get('currencySymbol') ?? '').trim().slice(0, 10) || restaurant.currency_symbol,
     Math.max(0, Math.min(100, Number(formData.get('serviceCharge')) || 0)),
     /^\d{4,8}$/.test(pin) ? pin : restaurant.staff_pin,
+    LANGUAGES.some((l) => l.code === formData.get('language'))
+      ? String(formData.get('language'))
+      : restaurant.language,
     restaurant.id
   );
 
